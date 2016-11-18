@@ -205,21 +205,39 @@ if(~isempty(stego_quantable_file))
     stego_train_quantable=zeros(size(cover_quantable));
 end
 
-stego_train_size=zeros(size(cover_train_size));
+stego_train_size=zeros(size(cover_train_size,1),size(cover_train_size,2),size(cover_train_size,3)*number_stego_files);
+
 
 if(~isempty(stego_quantable_file))
     for stego_file_count=1:number_stego_files
-        stego_train(:,:,stego_file_count:number_stego_files:end)=stego_feature{stego_file_count}(:,:,stego_file_count:number_stego_files:end);
-        stego_train_quantable(:,:,stego_file_count:number_stego_files:end)=stego_quantable{stego_file_count}(:,:,stego_file_count:number_stego_files:end);
-        stego_train_size(:,:,stego_file_count:number_stego_files:end)=stego_size{stego_file_count}(:,:,stego_file_count:number_stego_files:end);
+        stego_train(:,:,(stego_file_count-1)*number_cover_samples+1:stego_file_count*number_cover_samples)=stego_feature{stego_file_count};
+        stego_train_quantable(:,:,(stego_file_count-1)*number_cover_samples+1:stego_file_count*number_cover_samples)=stego_quantable{stego_file_count};
+        stego_train_size(:,:,(stego_file_count-1)*number_cover_samples+1:stego_file_count*number_cover_samples)=stego_size{stego_file_count};
     end
 else
     for stego_file_count=1:number_stego_files
-        stego_train(:,:,stego_file_count:number_stego_files:end)=stego_feature{stego_file_count}(:,:,stego_file_count:number_stego_files:end);
-        stego_train_size(:,:,stego_file_count:number_stego_files:end)=stego_size{stego_file_count}(:,:,stego_file_count:number_stego_files:end);
+         stego_train(:,:,(stego_file_count-1)*number_cover_samples+1:stego_file_count*number_cover_samples)=stego_feature{stego_file_count};
+         stego_train_size(:,:,(stego_file_count-1)*number_cover_samples+1:stego_file_count*number_cover_samples)=stego_size{stego_file_count};
     end
     stego_train_quantable=zeros(8,8);
 end
+
+
+
+
+% if(~isempty(stego_quantable_file))
+%     for stego_file_count=1:number_stego_files
+%         stego_train(:,:,stego_file_count:number_stego_files:end)=stego_feature{stego_file_count}(:,:,stego_file_count:number_stego_files:end);
+%         stego_train_quantable(:,:,stego_file_count:number_stego_files:end)=stego_quantable{stego_file_count}(:,:,stego_file_count:number_stego_files:end);
+%         stego_train_size(:,:,stego_file_count:number_stego_files:end)=stego_size{stego_file_count}(:,:,stego_file_count:number_stego_files:end);
+%     end
+% else
+%     for stego_file_count=1:number_stego_files
+%         stego_train(:,:,stego_file_count:number_stego_files:end)=stego_feature{stego_file_count}(:,:,stego_file_count:number_stego_files:end);
+%         stego_train_size(:,:,stego_file_count:number_stego_files:end)=stego_size{stego_file_count}(:,:,stego_file_count:number_stego_files:end);
+%     end
+%     stego_train_quantable=zeros(8,8);
+% end
 
 clear cover_feature cover_quantable cover_size;
 clear stego_feature stego_quantable stego_size;
@@ -261,7 +279,7 @@ end
 cover_train=chnls2rows(cover_train);
 stego_train=chnls2rows(stego_train);
 
-[trained_ensemble,results]=ensemble_training(cover_train,stego_train);
+[trained_ensemble,results]=ensemble_training_AllBlend(cover_train,stego_train);
 
 %%  ----------------------------------------save result to MDL file--------------------------------
 
