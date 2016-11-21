@@ -86,10 +86,10 @@ end
 
 fprintf('test ensemble all blend training, %d cover training samples, %d cover test samples:\n',num_train_cover,num_test_cover);
 
-fprintf('cover : %f\n',cover_results{1}.accuracy/100);
+fprintf('cover : %f%%\n',cover_results{1}.accuracy*100);
 
 for stego_count=1:numel(stego_feature)
-    fprintf('%s %s %s\n',stego_result{stego_count}.stego_name,stego_result{stego_count}.stego_payload_rate,stego_result{stego_count}.accuracy/100);
+    fprintf('%s %s %f%%\n',stego_result{stego_count}.stego_name,stego_result{stego_count}.stego_payload_rate,stego_result{stego_count}.accuracy*100);
 end
 
 end
